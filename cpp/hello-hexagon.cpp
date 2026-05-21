@@ -1,7 +1,7 @@
-extern "C" void main() {
+extern "C" int main() {
     int i = 10;
     while(i > 0) { 
         i--;
     }
-    return;
+    return 0;
 }

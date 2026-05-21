@@ -6,10 +6,11 @@
 .extern __bss_start
 .extern __bss_end
 .extern __stack_top
+.extern _exit
 
 _start:
     /* set stack ptr */
-    r29 = ##__stack_top /* SP */
+    r29 = ##0x20000  /* SP */
 
     /* zero bss */
     r0 = ##__bss_start
@@ -24,5 +25,7 @@ _start:
     jump 1b
 2:
     call main
+
+    call _exit
 3:
     jump 3b /* main returns -> halt */

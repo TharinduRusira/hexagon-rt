@@ -3,20 +3,30 @@ ENTRY(_start)
 SECTIONS
 {
     . = 0x10000;
-
-    .text : {
+    
+    __image_start = .;
+    
+    .text : ALIGN(16) {
+        __text_start = .;
+        *(.text.__start)
         *(.text*)
+        __text_end = .;
     }
 
-    .rodata : {
+    .rodata : ALIGN(16) {
+        __rodata_start = .;
         *(.rodata*)
+        __rodata_end = .;
     }
 
-    .data : {
+    .data : ALIGN(16) {
+        __data_start = .;
         *(.data*)
+        __data_end = .;
+
     }
 
-    .bss : {
+    .bss : ALIGN(16) {
         __bss_start = .;
         *(.bss*)
         *(COMMON)
@@ -25,7 +35,7 @@ SECTIONS
 
     /* stack */
     . = ALIGN(16);
-    __stack_bottom = .;
-    . = . + 0x1000; /* 4 KB */
-    __stack_top = .;
+    __stack_top = 0x20000;
+
+    __image_end = .;
 }
