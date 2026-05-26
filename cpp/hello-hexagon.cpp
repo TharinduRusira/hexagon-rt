@@ -3,5 +3,5 @@ extern "C" int main() {
     while(i > 0) { 
         i--;
     }
-    return 0;
+    return 42;
 }

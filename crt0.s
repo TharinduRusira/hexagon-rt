@@ -1,31 +1,33 @@
-.section .text
+.text
 .global _start
 .type _start, @function
 
 .extern main
-.extern __bss_start
-.extern __bss_end
-.extern __stack_top
-.extern _exit
+.extern _sbss
+.extern _ebss
 
 _start:
-    /* set stack ptr */
-    r29 = ##0x20000  /* SP */
-
     /* zero bss */
-    r0 = ##__bss_start
-    r1 = ##__bss_end
+    r0 = ##_sbss
+    r1 = ##_ebss
+    r2 = #0
 
-1: 
-    p0 = cmp.gtu(r0, r1)    /* predicate register */
-    if (p0) jump 2f
+.Lclear_bss_loop:
+    p0 = cmp.eq(r0, r1) /* predicate register */
+    if(p0) jump:nt .Llaunch_main
 
-    memw(r0+#0) = #0
-    r0 = add(r0, #4)
-    jump 1b
-2:
+    memb(r0++#1) = r2   /* store #0 in r0, increment r0 1 byte */
+    jump .Lclear_bss_loop
+
+.Llaunch_main:
+    /* qemu initial sp in r29 */
+    r29 = and(r29, #-32)
     call main
-
-    call _exit
-3:
-    jump 3b /* main returns -> halt */
+    {
+        r1 = r0
+        r6 = #93 /* sys_exit */
+    }
+    trap0(#1)
+    
+.Ldead_loop:
+    jump .Ldead_loop    /* for safe fallback */

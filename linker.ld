@@ -2,40 +2,36 @@ ENTRY(_start)
 
 SECTIONS
 {
-    . = 0x10000;
+    . = 0x70000000;
     
     __image_start = .;
     
-    .text : ALIGN(16) {
-        __text_start = .;
+    .text : {
+        _stext = .;
         *(.text.__start)
         *(.text*)
-        __text_end = .;
+        _etext = .;
     }
 
-    .rodata : ALIGN(16) {
-        __rodata_start = .;
+    .rodata : {
+        _srodata = .;
         *(.rodata*)
-        __rodata_end = .;
+        _erodata = .;
     }
 
-    .data : ALIGN(16) {
-        __data_start = .;
+    .data : {
+        _sdata = .;
         *(.data*)
-        __data_end = .;
+        _edata = .;
 
     }
 
-    .bss : ALIGN(16) {
-        __bss_start = .;
+    .bss : {
+        _sbss = .;
         *(.bss*)
         *(COMMON)
-        __bss_end = .;
+        _ebss = .;
     }
-
-    /* stack */
-    . = ALIGN(16);
-    __stack_top = 0x20000;
 
     __image_end = .;
 }
