@@ -13,7 +13,7 @@ clang --target=hexagon-unknown-linux-musl -c crt0.s -o crt0.o
 
 clang --target=hexagon-unknown-linux-musl -O2 -ffreestanding -c $1 -o main.o
 
-ld.lld -T linker.ld crt0.o main.o -o hexagon.elf
+ld.lld -T linker.ld crt0.o print.o main.o -o hexagon.elf
 
 qemu-hexagon ./hexagon.elf
 
